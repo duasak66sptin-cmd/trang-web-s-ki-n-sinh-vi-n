@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniEvent - Sự kiện sinh viên</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">UniEvent 🎓</a>
+            <div class="nav-links">
+                <button data-view="discover" class="active">Khám phá</button>
+                <button data-view="favorites">Yêu thích</button>
+                <button data-view="manage">Quản lý sự kiện</button>
+            </div>
+        </nav>
+
+        <div class="hero">
+            <h1>Kết nối sinh viên, tạo nên trải nghiệm</h1>
+            <p>Khám phá sự kiện, đăng ký tham gia và kết nối cộng đồng sinh viên.</p>
+        </div>
+    </header>
+
+    <main>
+        <section id="discoverView">
+            <div class="stats">
+                <div class="stat">
+                    <span>Tổng số sự kiện</span>
+                    <strong id="statEvents">0</strong>
+                </div>
+                <div class="stat">
+                    <span>Lượt đăng ký</span>
+                    <strong id="statRegistrations">0</strong>
+                </div>
+                <div class="stat">
+                    <span>Sự kiện yêu thích</span>
+                    <strong id="statFavorites">0</strong>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <input id="search" type="search" placeholder="🔎 Tìm kiếm sự kiện...">
+                <select id="category">
+                    <option value="">Tất cả danh mục</option>
+                    <option>Công nghệ</option>
+                    <option>Học thuật</option>
+                    <option>Hướng nghiệp</option>
+                    <option>Văn hóa</option>
+                    <option>Thể thao</option>
+                    <option>Tình nguyện</option>
+                </select>
+                <select id="sort">
+                    <option value="date">Sắp xếp theo ngày</option>
+                    <option value="name">Tên A-Z</option>
+                    <option value="popular">Độ phổ biến</option>
+                </select>
+            </div>
+
+            <h2>Sự kiện nổi bật</h2>
+            <div id="eventGrid" class="event-grid"></div>
+        </section>
+
+        <section id="favoritesView" class="hidden">
+            <h2>Sự kiện yêu thích</h2>
+            <div id="favoriteGrid" class="event-grid"></div>
+        </section>
+
+        <section id="manageView" class="hidden">
+            <div class="section-heading">
+                <h2>Quản lý sự kiện</h2>
+                <button class="btn primary" id="newEventBtn">+ Thêm sự kiện</button>
+            </div>
+
+            <div class="export-actions">
+                <button class="btn secondary" id="exportCsv">Xuất danh sách đăng ký CSV</button>
+                <button class="btn secondary" id="exportJson">Sao lưu dữ liệu JSON</button>
+                <button class="btn danger" id="resetDemo">Khôi phục dữ liệu mẫu</button>
+            </div>
+
+            <div id="manageGrid" class="event-grid"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 UniEvent - Nền tảng sự kiện sinh viên</p>
+        <p>Dự án học tập sử dụng HTML, CSS và JavaScript.</p>
+    </footer>
+
+    <dialog id="registerDialog">
+        <form id="registerForm" class="dialog-content">
+            <h2>Đăng ký tham gia</h2>
+            <p id="registerEventName"></p>
+            <input type="hidden" id="registerEventId">
+
+            <label for="studentName">Họ và tên *</label>
+            <input id="studentName" required maxlength="100" placeholder="Nguyễn Văn A">
+
+            <label for="studentEmail">Email *</label>
+            <input id="studentEmail" type="email" required maxlength="150" placeholder="email@example.com">
+
+            <label for="studentCode">Mã sinh viên</label>
+            <input id="studentCode" maxlength="40" placeholder="SV000123">
+
+            <div class="dialog-actions">
+                <button type="button" class="btn secondary" data-close="registerDialog">Hủy</button>
+                <button type="submit" class="btn primary">Xác nhận đăng ký</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="eventDialog">
+        <form id="eventForm" class="dialog-content">
+            <h2 id="eventFormTitle">Thêm sự kiện</h2>
+            <input type="hidden" id="editId">
+
+            <label for="eventName">Tên sự kiện *</label>
+            <input id="eventName" required maxlength="120">
+
+            <label for="eventCategory">Danh mục *</label>
+            <select id="eventCategory" required>
+                <option value="">Chọn danh mục</option>
+                <option>Công nghệ</option>
+                <option>Học thuật</option>
+                <option>Hướng nghiệp</option>
+                <option>Văn hóa</option>
+                <option>Thể thao</option>
+                <option>Tình nguyện</option>
+            </select>
+
+            <div class="form-row">
+                <div>
+                    <label for="eventDate">Ngày tổ chức *</label>
+                    <input id="eventDate" type="date" required>
+                </div>
+                <div>
+                    <label for="eventTime">Giờ tổ chức</label>
+                    <input id="eventTime" type="time" value="08:00">
+                </div>
+            </div>
+
+            <label for="eventLocation">Địa điểm *</label>
+            <input id="eventLocation" required maxlength="120">
+
+            <label for="eventCapacity">Số chỗ tối đa</label>
+            <input id="eventCapacity" type="number" min="1" value="100" required>
+
+            <label for="eventDescription">Mô tả sự kiện *</label>
+            <textarea id="eventDescription" rows="4" maxlength="600" required></textarea>
+
+            <div class="dialog-actions">
+                <button type="button" class="btn secondary" data-close="eventDialog">Hủy</button>
+                <button type="submit" class="btn primary">Lưu sự kiện</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="confirmDialog">
+        <div class="dialog-content">
+            <h2 id="confirmTitle">Xác nhận</h2>
+            <p id="confirmMessage"></p>
+            <div class="dialog-actions">
+                <button type="button" class="btn secondary" data-close="confirmDialog">Hủy</button>
+                <button id="confirmBtn" type="button" class="btn danger">Xác nhận</button>
+            </div>
+        </div>
+    </dialog>
+
+    <div id="toast" class="toast hidden" role="status"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
